@@ -25,18 +25,23 @@ jobs:
         run: mvn clean package -DskipTests
 
       - name: Create EXE Installer
-        shell: cmd
+        shell: pwsh
         run: |
-          "%JAVA_HOME%\bin\jpackage" ^
-            --type exe ^
-            --input target ^
-            --dest dist ^
-            --name "FileOrganizerPro" ^
-            --main-jar file-organizer-*.jar ^
-            --main-class bartek.fileorganizer.Launcher ^
-            --icon appIcon.ico ^
-            --win-shortcut ^
-            --win-menu ^
+          $jar = Get-ChildItem "target\file-organizer-*.jar" | Where-Object { $_.Name -notlike "original-*" } | Select-Object -First 1
+          
+          Write-Host "Znaleziono JAR: $($jar.Name)"
+          
+          # 2. Uruchom jpackage używając wykrytej nazwy
+          & "$env:JAVA_HOME\bin\jpackage" `
+            --type exe `
+            --input target `
+            --dest dist `
+            --name "FileOrganizerPro" `
+            --main-jar $jar.Name `
+            --main-class bartek.fileorganizer.Launcher `
+            --icon appIcon.ico `
+            --win-shortcut `
+            --win-menu `
             --app-version 1.0.0
 
       - name: Upload EXE Artifact
@@ -69,12 +74,17 @@ jobs:
 
       - name: Create DEB Installer
         run: |
+          # 1. Znajdź dokładną nazwę pliku JAR
+          JAR_NAME=$(ls target/file-organizer-*.jar | grep -v "original" | head -n 1 | xargs basename)
+          echo "Używam pliku JAR: $JAR_NAME"
+          
+          # 2. Uruchom jpackage
           $JAVA_HOME/bin/jpackage \
             --type deb \
             --input target \
             --dest dist \
             --name "file-organizer-pro" \
-            --main-jar file-organizer-*.jar \
+            --main-jar "$JAR_NAME" \
             --main-class bartek.fileorganizer.Launcher \
             --icon src/main/resources/appIcon.png \
             --app-version 1.0.0
@@ -104,12 +114,17 @@ jobs:
 
       - name: Create DMG Installer
         run: |
+          # 1. Znajdź dokładną nazwę pliku JAR
+          JAR_NAME=$(ls target/file-organizer-*.jar | grep -v "original" | head -n 1 | xargs basename)
+          echo "Używam pliku JAR: $JAR_NAME"
+          
+          # 2. Uruchom jpackage
           $JAVA_HOME/bin/jpackage \
             --type dmg \
             --input target \
             --dest dist \
             --name "FileOrganizerPro" \
-            --main-jar file-organizer-*.jar \
+            --main-jar "$JAR_NAME" \
             --main-class bartek.fileorganizer.Launcher \
             --icon appIcon.icns \
             --app-version 1.0.0
