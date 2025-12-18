@@ -1,7 +1,7 @@
 # 📂 File Organizer Pro
 
 ![Build Status](https://img.shields.io/github/actions/workflow/status/1Batrex1/file-organizer/build.yml?branch=main)
-![Java Version](https://img.shields.io/badge/Java-25%2B-ED8B00?logo=openjdk&logoColor=white)
+![Java Version](https://img.shields.io/badge/Java-21%2B-ED8B00?logo=openjdk&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
 > **Stop organizing files manually.** File Organizer watches your folders and automatically sorts files into subdirectories based on your rules. Runs quietly in the background.
@@ -45,7 +45,7 @@ Go to the [**Releases**](https://github.com/1Batrex1/file-organizer/releases) pa
 
 ## 🏗️ Tech Stack
 
-* **Language:** Java 25
+* **Language:** Java 21
 * **GUI Framework:** JavaFX 21
 * **Styling:** BootstrapFX (Twitter Bootstrap for JavaFX)
 * **JSON Processing:** Jackson

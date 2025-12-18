@@ -1,0 +1,121 @@
+name: Build Desktop Apps
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  # --- WINDOWS BUILD ---
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build Fat JAR with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Create EXE Installer
+        shell: cmd
+        run: |
+          "%JAVA_HOME%\bin\jpackage" ^
+            --type exe ^
+            --input target ^
+            --dest dist ^
+            --name "FileOrganizerPro" ^
+            --main-jar file-organizer-*.jar ^
+            --main-class bartek.fileorganizer.Launcher ^
+            --icon appIcon.ico ^
+            --win-shortcut ^
+            --win-menu ^
+            --app-version 1.0.0
+
+      - name: Upload EXE Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FileOrganizer-Windows
+          path: dist/*.exe
+
+  # --- LINUX BUILD ---
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Install Linux dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y binutils fakeroot
+
+      - name: Build Fat JAR with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Create DEB Installer
+        run: |
+          $JAVA_HOME/bin/jpackage \
+            --type deb \
+            --input target \
+            --dest dist \
+            --name "file-organizer-pro" \
+            --main-jar file-organizer-*.jar \
+            --main-class bartek.fileorganizer.Launcher \
+            --icon src/main/resources/appIcon.png \
+            --app-version 1.0.0
+
+      - name: Upload DEB Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FileOrganizer-Linux
+          path: dist/*.deb
+
+  # --- MACOS BUILD ---
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build Fat JAR with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Create DMG Installer
+        run: |
+          $JAVA_HOME/bin/jpackage \
+            --type dmg \
+            --input target \
+            --dest dist \
+            --name "FileOrganizerPro" \
+            --main-jar file-organizer-*.jar \
+            --main-class bartek.fileorganizer.Launcher \
+            --icon appIcon.icns \
+            --app-version 1.0.0
+
+      - name: Upload DMG Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FileOrganizer-MacOS
+          path: dist/*.dmg
