@@ -91,8 +91,7 @@ public class FileProcessor {
                 if (lock != null) {
                     return true;
                 }
-            } catch (IOException _) {
-            }
+            } catch (IOException ignored) {}
 
             log.debug("File is locked waiting... ({}/{})", i + 1, maxAttempts);
             Thread.sleep(sleepTime);

@@ -179,7 +179,7 @@ public class FileOrganizerApp extends Application {
             });
 
             MenuItem exitItem = new MenuItem("Close");
-            exitItem.addActionListener(_ -> {
+            exitItem.addActionListener(e -> {
                 tray.remove(tray.getTrayIcons()[0]);
                 Platform.exit();
                 System.exit(0);
@@ -296,7 +296,7 @@ public class FileOrganizerApp extends Application {
         Button changeBtn = new Button("Change...");
         changeBtn.getStyleClass().addAll("btn", "btn-secondary");
         changeBtn.setOnAction(
-                _ -> {
+                e -> {
                     DirectoryChooser directoryChooser = new DirectoryChooser();
                     directoryChooser.setTitle("Select Source Folder");
                     File selectedDirectory = directoryChooser.showDialog(null);
@@ -314,7 +314,7 @@ public class FileOrganizerApp extends Application {
         scanBtn.setGraphic(new Label("🔍"));
         scanBtn.getGraphic().setStyle("-fx-text-fill: white;");
         scanBtn.setOnAction(
-                _ -> {
+                e -> {
                     scanBtn.setDisable(true);
                     FileProcessor tempProcessor = new FileProcessor(currentConfig, msg -> {
                         Platform.runLater(() -> {
@@ -347,7 +347,7 @@ public class FileOrganizerApp extends Application {
         addBtn.setGraphic(new Label("➕"));
         addBtn.getGraphic().setStyle("-fx-text-fill: white;");
         addBtn.setOnAction(
-                _ -> {
+                e -> {
                     Dialog<Rule> dialog = new Dialog<>();
                     dialog.setTitle("New rule");
                     dialog.setHeaderText("Define new move rule");
@@ -379,7 +379,7 @@ public class FileOrganizerApp extends Application {
                     Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
                     try {
                         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/appIcon.png"))));
-                    } catch (Exception _) {
+                    } catch (Exception ignored) {
                     }
 
 
@@ -423,7 +423,7 @@ public class FileOrganizerApp extends Application {
         );
 
         removeBtn.setOnAction(
-                _ -> {
+                e -> {
                     Rule selectedRule = rulesTable.getSelectionModel().getSelectedItem();
                     if (selectedRule != null) {
                         rulesTable.getItems().remove(selectedRule);
@@ -487,7 +487,7 @@ public class FileOrganizerApp extends Application {
 
         try {
             stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/appIcon.png"))));
-        } catch (Exception _) {
+        } catch (Exception ignored) {
         }
 
         DialogPane dialogPane = alert.getDialogPane();
