@@ -22,7 +22,7 @@ import java.util.Collections;
 @Slf4j
 public class ConfigService {
 
-    private static final Path CONFIG_PATH = Paths.get("organizer_config.json");
+    private static final Path CONFIG_PATH = Paths.get(System.getProperty("user.home"), ".fileorganizer", "organizer_config.json");
     private final ObjectMapper mapper;
 
     public ConfigService() {
@@ -42,6 +42,15 @@ public class ConfigService {
         Path downloads = getDownloadsFolder();
 
         AppConfig config = new AppConfig(downloads.toString(), Collections.emptyList());
+
+
+        if(!Files.exists(CONFIG_PATH.getParent())) {
+            try {
+                Files.createDirectories(CONFIG_PATH.getParent());
+            } catch (IOException e) {
+                log.error("Error creating config directory: {}", e.getMessage());
+            }
+        }
 
         mapper.writeValue(CONFIG_PATH.toFile(), config);
 
