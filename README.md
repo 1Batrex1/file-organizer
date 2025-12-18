@@ -1,6 +1,6 @@
 # 📂 File Organizer Pro
 
-![Build Status](https://img.shields.io/github/actions/workflow/status/1Batrex1/file-organizer/build.yml?branch=main)
+![Build Status](https://img.shields.io/github/actions/workflow/status/1Batrex1/file-organizer/build.yml?branch=master)
 ![Java Version](https://img.shields.io/badge/Java-21%2B-ED8B00?logo=openjdk&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)
 
